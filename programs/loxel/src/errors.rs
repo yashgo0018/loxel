@@ -11,4 +11,10 @@ pub enum OrganizationError {
 
     #[msg("Key is not authorized")]
     KeyNotFound,
+
+    #[msg("Key not unauthorized")]
+    Unauthorized,
+
+    #[msg("Insufficient points")]
+    InsufficientPoints,
 }

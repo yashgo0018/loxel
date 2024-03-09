@@ -4,6 +4,7 @@ import PageSeparator from "../../common/PageSeparator";
 import Tabs from "../../common/Tabs";
 import AnalyticsView from "./views/AnalyticsView";
 import Passes from "./views/Passes";
+import Developer from "./views/Developer";
 
 export default function OrganizationDashboardPage() {
   const [viewElement, setViewElement] = useState<React.ReactNode>();
@@ -12,7 +13,7 @@ export default function OrganizationDashboardPage() {
     { title: "Passes", element: <Passes /> },
     { title: "Benifits" },
     { title: "Analytics", element: <AnalyticsView /> },
-    { title: "Developer" },
+    { title: "Developer", element: <Developer /> },
     { title: "Settings" },
   ];
 

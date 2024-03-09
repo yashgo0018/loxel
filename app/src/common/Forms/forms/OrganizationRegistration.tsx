@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import DataForm from "../../DataForm";
+import CommonFormInput from "../CommonFormInput";
 
 interface OrganizationRegistrationProps {
   className?: string;
@@ -28,14 +29,14 @@ export default function OrganizationRegistration(
         }
       />
 
-      <FormInput
+      <CommonFormInput
         name="organizationName"
         placeholder="Organization Name"
         label="This is how you will be known on Loxel"
         required
       />
 
-      <FormInput
+      <CommonFormInput
         name="organizationImage"
         placeholder="Image"
         onChange={(e) => setImgUrl(e.target.value)}
@@ -43,27 +44,27 @@ export default function OrganizationRegistration(
         required
       />
 
-      <FormInput
+      <CommonFormInput
         name="organizationEmail"
         placeholder="Eg: admin@yourbrand.com"
         label="Email will be used to login and in case you forget your credentials"
         required
       />
 
-      <FormInput
+      <CommonFormInput
         name="organizationWebsite"
         placeholder="Website  (www.yourstore.com)"
         label="This could be your brand's homepage or web store"
         required
       />
 
-      <FormInput
+      <CommonFormInput
         name="organizationSells"
         placeholder="What is your business  (Eg: Footwear, Cafe, etc.)"
         label="We collect this info for analytics purpose"
       />
 
-      <FormInput
+      <CommonFormInput
         name="organizationCountry"
         placeholder="Country"
         label="You can register different organizations for different countries"
@@ -82,32 +83,5 @@ export default function OrganizationRegistration(
         Register
       </button>
     </DataForm>
-  );
-}
-
-function FormInput(
-  props: React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > & { label?: string }
-) {
-  const { label, className, ...otherProps } = props;
-
-  return (
-    <div className="relative flex flex-col items-stretch">
-      <input className={twMerge("mt-8", className)} {...otherProps} />
-
-      {props.required && (
-        <span className="absolute text-red-500 right-1 top-1/2 -translate-y-1/2">
-          *
-        </span>
-      )}
-
-      {label && (
-        <label htmlFor={props.name} className="text-xs text-front/40 mt-2">
-          {label}
-        </label>
-      )}
-    </div>
   );
 }

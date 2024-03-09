@@ -19,7 +19,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export default function LineChart(props: {
@@ -43,9 +43,5 @@ export default function LineChart(props: {
     ],
   };
 
-  return (
-    <div className={twMerge("", props.className)}>
-      <Line options={options} data={data} />
-    </div>
-  );
+  return <Line className={props.className} options={options} data={data} />;
 }

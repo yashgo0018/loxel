@@ -11,7 +11,7 @@ export default function Developer() {
         View API keys to access lab lab lab and private content items{" "}
         <span className="text-primary">( With Limitation and restriction )</span>
       </p>
-      <div>
+      <div className="mt-8">
         <ApiCard />
       </div>
     </article>

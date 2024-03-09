@@ -54,7 +54,16 @@ pub mod loxel {
             return err!(OrganizationError::KeyNotFound);
         }
 
-        organization.authorized_keys.remove(key_found.into());
+        organization.authorized_keys.remove(key_found);
+
+        Ok(())
+    }
+
+    pub fn add_loyalty_pass(ctx: Context<AddLoyaltyPass>, name: String) -> Result<()> {
+        let pass_template = &mut ctx.accounts.pass_template_pda;
+
+        pass_template.organization = ctx.accounts.organization_pda.key();
+        pass_template.name = name;
 
         Ok(())
     }
@@ -95,6 +104,34 @@ pub struct KeyChange<'info> {
     pub owner: Signer<'info>,
 }
 
+#[derive(Accounts)]
+#[instruction(name:String)]
+pub struct AddLoyaltyPass<'info> {
+    #[account(
+        seeds=[
+            "ORGANIZATION".as_bytes(),
+            owner.key().as_ref()
+        ],
+        bump,
+    )]
+    pub organization_pda: Account<'info, Organization>,
+    #[account(
+        init,
+        seeds=[
+            "PASS_TEMPLATE".as_bytes(),
+            organization_pda.key().as_ref(),
+            name.as_bytes()
+        ],
+        bump,
+        payer=owner,
+        space=8+32+(4+name.len())
+    )]
+    pub pass_template_pda: Account<'info, PassTemplate>,
+    #[account(mut)]
+    pub owner: Signer<'info>,
+    pub system_program: Program<'info, System>
+}
+
 #[account]
 pub struct Organization {
     owner: Pubkey,
@@ -102,3 +139,8 @@ pub struct Organization {
     authorized_keys: Vec<Pubkey>
 }
 
+#[account]
+pub struct PassTemplate {
+    organization: Pubkey,
+    name: String
+}

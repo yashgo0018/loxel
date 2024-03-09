@@ -86,4 +86,21 @@ describe("loxel", () => {
     assert.equal(organization.authorizedKeys[0].toString(), keys[0].publicKey.toString());
     assert.equal(organization.authorizedKeys[1].toString(), keys[1].publicKey.toString());
   });
+
+  it("Should create a pass template", async () => {
+    const passDetails = {
+      name: "Gold Pass"
+    };
+
+    const tx = await program.methods.addLoyaltyPass(passDetails.name).rpc();
+
+    const [organization_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("ORGANIZATION"), provider.wallet.publicKey.toBuffer()], program.programId);
+    // const organization = await program.account.organization.fetch(organization_pda);
+
+    const [pass_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("PASS_TEMPLATE"), organization_pda.toBuffer(), Buffer.from(passDetails.name)], program.programId)
+    const pass = await program.account.passTemplate.fetch(pass_pda);
+
+    assert.equal(pass.organization.toString(), organization_pda.toString());
+    assert.equal(pass.name, passDetails.name);
+  });
 });

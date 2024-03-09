@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as anchor from "@coral-xyz/anchor";
-import { useWeb3Context } from "./Web3";
+import { useWeb3Context } from "./web3Context";
 
 interface IProgramContext {}
 

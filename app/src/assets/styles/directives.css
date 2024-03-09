@@ -1,0 +1,10 @@
+@property --property-name {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #c0ffee;
+}
+
+@font-face {
+  font-family: "Geist Sans";
+  src: url("../fonts/GeistVF.ttf");
+}

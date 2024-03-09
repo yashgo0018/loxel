@@ -8,7 +8,7 @@ interface OrganizationRegistrationProps {
 }
 
 export default function OrganizationRegistration(
-  props: OrganizationRegistrationProps
+  props: OrganizationRegistrationProps,
 ) {
   const [imgUrl, setImgUrl] = useState("");
 
@@ -30,6 +30,7 @@ export default function OrganizationRegistration(
       />
 
       <CommonFormInput
+        className="mt-8"
         name="organizationName"
         placeholder="Organization Name"
         label="This is how you will be known on Loxel"
@@ -37,6 +38,7 @@ export default function OrganizationRegistration(
       />
 
       <CommonFormInput
+        className="mt-8"
         name="organizationImage"
         placeholder="Image"
         onChange={(e) => setImgUrl(e.target.value)}
@@ -45,6 +47,7 @@ export default function OrganizationRegistration(
       />
 
       <CommonFormInput
+        className="mt-8"
         name="organizationEmail"
         placeholder="Eg: admin@yourbrand.com"
         label="Email will be used to login and in case you forget your credentials"
@@ -52,6 +55,7 @@ export default function OrganizationRegistration(
       />
 
       <CommonFormInput
+        className="mt-8"
         name="organizationWebsite"
         placeholder="Website  (www.yourstore.com)"
         label="This could be your brand's homepage or web store"
@@ -59,12 +63,14 @@ export default function OrganizationRegistration(
       />
 
       <CommonFormInput
+        className="mt-8"
         name="organizationSells"
         placeholder="What is your business  (Eg: Footwear, Cafe, etc.)"
         label="We collect this info for analytics purpose"
       />
 
       <CommonFormInput
+        className="mt-8"
         name="organizationCountry"
         placeholder="Country"
         label="You can register different organizations for different countries"

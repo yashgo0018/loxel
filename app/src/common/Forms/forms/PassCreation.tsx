@@ -17,8 +17,13 @@ export default function PassCreation(props: PassCreationProps) {
         <Pass
           className="w-full shadow-lg shadow-front/25"
           data={{
-            name: "Shoppers Black",
-            colors: { primary: "#111111", secondary: "#a67c00" },
+            passName: "Shoppers Black",
+            userName: "Spandan Barve",
+            colors: {
+              primary: "#111111",
+              secondary: "#a67c00",
+              text: { primary: "#ffffff", secondary: "#000000" },
+            },
             textures: { primary: "matte", secondary: "glass" },
             logo: {
               url: "https://watcher.guru/news/wp-content/uploads/2023/12/avax-800x450.jpg.webp",

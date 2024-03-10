@@ -5,7 +5,9 @@ export interface PassData {
   colors: {
     primary: string;
     secondary: string;
+    text: { primary: string; secondary: string };
   };
   logo: { url: string };
-  name: string;
+  passName: string;
+  userName : string
 }

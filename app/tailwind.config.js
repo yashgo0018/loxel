@@ -14,6 +14,10 @@ module.exports = {
         foreground: "#292524",
         front: "#fafaf9",
         back: "#422006",
+        A: "var(--A)",
+        B: "var(--B)",
+        C: "var(--C)",
+        D: "var(--D)",
       },
       borderRadius: {
         inherit: "inherit",

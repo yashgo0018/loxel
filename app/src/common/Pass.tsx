@@ -11,34 +11,52 @@ export default function Pass(props: PassProps) {
   const { data } = props;
 
   return (
-    <div
-      className={twMerge(
-        "relative rounded-lg aspect-[1.586] cursor-default select-none overflow-hidden",
-        props.className,
-      )}
-      style={{ background: data.colors.primary }}
+    <figure
+      style={
+        {
+          "--A": data.colors.primary,
+          "--B": data.colors.secondary,
+          "--C": data.colors.text.primary,
+          "--D": data.colors.text.secondary,
+        } as React.CSSProperties
+      }
     >
-      <div className="absolute-cover z-30">
-        <TextureOverlay type={data.textures.primary} />
+      <div
+        className={twMerge(
+          "relative rounded-lg aspect-[1.586] cursor-default select-none overflow-hidden bg-A",
+          props.className,
+        )}
+      >
+        <div className="absolute-cover z-30">
+          <TextureOverlay type={data.textures.primary} />
 
-        <div className="h-1/3 absolute bottom-0 w-full">
-          <figure
-            className="absolute-cover"
-            style={{ background: data.colors.secondary }}
-          />
-          <TextureOverlay type={data.textures.secondary} />
+          <div className="h-1/3 absolute bottom-0 w-full">
+            <figure className="absolute-cover bg-B" />
+            <TextureOverlay type={data.textures.secondary} />
+          </div>
+
+          <div className="h-1/3 relative px-3 pt-3 flex justify-between items-center">
+            <figure className="h-full relative aspect-square overflow-hidden rounded-full">
+              <img
+                className="absolute-cover aspect-square object-cover"
+                src={data.logo.url}
+              />
+              <div className="absolute-cover mix-blend-hue bg-B" />
+            </figure>
+
+            <div className="brightness-150 saturate-150 text-C">
+              <h2 className="text-xl">{data.passName}</h2>
+            </div>
+          </div>
         </div>
 
-        <div className="h-1/3 aspect-square relative top-3 left-3 ">
-          <img
-            className="rounded-full absolute-cover aspect-square object-cover"
-            src={data.logo.url}
-          />
+        <div className="absolute w-full top-1/3 bottom-1/3 flex justify-center items-center text-C">
+          <p>{data.userName}</p>
         </div>
+
+        <div className="absolute-cover z-10"></div>
       </div>
-
-      <div className="absolute-cover z-10"></div>
-    </div>
+    </figure>
   );
 }
 

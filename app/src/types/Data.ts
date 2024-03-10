@@ -1,6 +1,11 @@
 export type TextureType = "wood" | "glass" | "metal" | "matte";
 
 export interface PassData {
-  texture: TextureType;
-  color: string;
+  textures: { primary: TextureType; secondary: TextureType };
+  colors: {
+    primary: string;
+    secondary: string;
+  };
+  logo: { url: string };
+  name: string;
 }

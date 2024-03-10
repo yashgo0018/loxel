@@ -11,7 +11,7 @@ export default function Passes() {
   const passes = dummyPasses;
 
   function createPassAction() {
-    drawer.show(<Forms.PassCreation />);
+    drawer.show(<Forms.PassCreation className="w-2/3" />);
   }
 
   return (

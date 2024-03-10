@@ -4,27 +4,50 @@ import { twMerge } from "tailwind-merge";
 
 interface PassProps {
   className?: string;
+  data: PassData;
 }
 
 export default function Pass(props: PassProps) {
-  const data: PassData = {
-    texture: "glass",
-    color: "#B2022F",
-  };
+  const { data } = props;
 
   return (
     <div
       className={twMerge(
-        "relative rounded-lg aspect-[1.586] cursor-default select-none",
-        props.className
+        "relative rounded-lg aspect-[1.586] cursor-default select-none overflow-hidden",
+        props.className,
       )}
-      style={{ background: data.color }}
+      style={{ background: data.colors.primary }}
     >
-      <img
-        src={getTextureImage(data.texture)}
-        className="absolute-cover mix-blend-overlay opacity-30 z-30"
-      />
+      <div className="absolute-cover z-30">
+        <TextureOverlay type={data.textures.primary} />
+
+        <div className="h-1/3 absolute bottom-0 w-full">
+          <figure
+            className="absolute-cover"
+            style={{ background: data.colors.secondary }}
+          />
+          <TextureOverlay type={data.textures.secondary} />
+        </div>
+
+        <div className="h-1/3 aspect-square relative top-3 left-3 ">
+          <img
+            className="rounded-full absolute-cover aspect-square object-cover"
+            src={data.logo.url}
+          />
+        </div>
+      </div>
+
+      <div className="absolute-cover z-10"></div>
     </div>
+  );
+}
+
+function TextureOverlay(props: { type: TextureType }) {
+  return (
+    <img
+      src={getTextureImage(props.type)}
+      className="absolute-cover mix-blend-overlay saturate-0 object-cover opacity-30"
+    />
   );
 }
 

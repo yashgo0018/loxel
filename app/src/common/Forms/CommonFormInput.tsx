@@ -10,7 +10,7 @@ export default function CommonFormInput(props: CommonFormInputProps) {
 
   return (
     <div className="relative flex flex-col items-stretch">
-      <input className={twMerge( className)} {...otherProps} />
+      <input className={twMerge(className)} {...otherProps} />
 
       {props.required && (
         <span className="absolute text-red-500 right-1 top-1/2 -translate-y-1/2">

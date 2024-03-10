@@ -2,11 +2,12 @@ import React from "react";
 import DataForm from "../../DataForm";
 import CommonFormInput from "../CommonFormInput";
 import { twMerge } from "tailwind-merge";
-import Pass, { TextureType, getTextureTypeArray } from "../../Pass";
 import Dropdown from "../../Dropdown";
 import { PassData } from "../../../types";
 import { useState } from "react";
 import { passPlaceholderData } from "../../../config";
+import { TextureType, getTextureTypeArray } from "../../../config/textures";
+import Pass from "../../Pass";
 
 interface PassCreationProps {
   className?: string;

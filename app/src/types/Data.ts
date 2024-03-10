@@ -1,4 +1,4 @@
-import { TextureType } from "../common/Pass";
+import { TextureType } from "../config/textures";
 
 export interface PassData {
   textures: { primary: TextureType; secondary: TextureType };

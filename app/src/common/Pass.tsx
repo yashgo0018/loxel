@@ -2,8 +2,8 @@ import React from "react";
 import { PassData } from "../types";
 import { twMerge } from "tailwind-merge";
 import FormattedDate from "./FormattedDate";
-import { getTypedKeys } from "../utils";
 import { TextureType, getTextureImage } from "../config/textures";
+import TextureOverlay from "./TextureOverlay";
 
 interface PassProps {
   className?: string;
@@ -85,14 +85,5 @@ export default function Pass(props: PassProps) {
         </div>
       </div>
     </figure>
-  );
-}
-
-function TextureOverlay(props: { type: TextureType }) {
-  return (
-    <img
-      src={getTextureImage(props.type)}
-      className="absolute-cover mix-blend-overlay saturate-0 object-cover opacity-10"
-    />
   );
 }

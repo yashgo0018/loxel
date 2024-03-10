@@ -17,6 +17,7 @@ pub mod loxel {
         let organization = &mut ctx.accounts.organization_pda;
         organization.owner = ctx.accounts.owner.key();
         organization.metadata_cid = metadata_cid;
+        organization.total_benefits = 0;
 
         Ok(())
     }
@@ -68,9 +69,9 @@ pub mod loxel {
         Ok(())
     }
 
-    pub fn issue_loyalty_pass(ctx: Context<IssuePass>, user: Pubkey, expiry_timestamp: u64, points: u32) -> Result<()> {
+    pub fn issue_loyalty_pass(ctx: Context<IssuePass>, organization_owner:Pubkey, pass_name:String, user:Pubkey, expiry_timestamp: u32, points: u32) -> Result<()> {
         if !ctx.accounts.organization_pda.authorized_keys.contains(&ctx.accounts.authorized_key.key()) {
-            return err!(Unauthorized);
+            return err!(OrganizationError::Unauthorized);
         }
 
         let pass = &mut ctx.accounts.pass_pda;
@@ -84,7 +85,7 @@ pub mod loxel {
         Ok(())
     }
 
-    pub fn deduct_points(ctx: Context<UsePass>, user: Pubkey, points: u32) -> Result<()> {
+    pub fn deduct_points(ctx: Context<UsePass>, organization_owner:Pubkey, pass_name:String, user: Pubkey, points: u32) -> Result<()> {
         if !ctx.accounts.organization_pda.authorized_keys.contains(&ctx.accounts.authorized_key.key()) {
             return err!(OrganizationError::Unauthorized);
         }
@@ -112,7 +113,7 @@ pub struct RegisterOrganization<'info> {
         ],
         bump,
         payer=owner,
-        space=8+32+(4+59)+(4+32*10)
+        space=8+32+(4+59)+(4+32*10)+2
     )]
     pub organization_pda: Account<'info, Organization>,
     #[account(mut)]
@@ -163,12 +164,12 @@ pub struct AddLoyaltyPass<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(user:Pubkey)]
+#[instruction(organization_owner:Pubkey, pass_name:String, user:Pubkey)]
 pub struct IssuePass<'info> {
     #[account(
         seeds=[
             "ORGANIZATION".as_bytes(),
-            owner.key().as_ref()
+            organization_owner.as_ref()
         ],
         bump,
     )]
@@ -177,7 +178,7 @@ pub struct IssuePass<'info> {
         seeds=[
             "PASS_TEMPLATE".as_bytes(),
             organization_pda.key().as_ref(),
-            name.as_bytes()
+            pass_name.as_bytes()
         ],
         bump,
     )]
@@ -190,22 +191,23 @@ pub struct IssuePass<'info> {
             user.key().as_ref()
         ],
         bump,
-        payer=authorized_key,
-        space=8+32+32+32+8+4+4
+        payer=server,
+        space=8+32+32+32+4+4+4
     )]
     pub pass_pda: Account<'info, Pass>,
-    #[account(mut)]
     pub authorized_key: Signer<'info>,
-    pub system_program: Program<'info, System>
+    pub system_program: Program<'info, System>,
+    #[account(mut)]
+    pub server: Signer<'info>
 }
 
 #[derive(Accounts)]
-#[instruction(user:Pubkey)]
+#[instruction(organization_owner:Pubkey, pass_name:String, user:Pubkey)]
 pub struct UsePass<'info> {
     #[account(
         seeds=[
             "ORGANIZATION".as_bytes(),
-            owner.key().as_ref()
+            organization_owner.as_ref()
         ],
         bump,
     )]
@@ -214,7 +216,7 @@ pub struct UsePass<'info> {
         seeds=[
             "PASS_TEMPLATE".as_bytes(),
             organization_pda.key().as_ref(),
-            name.as_bytes()
+            pass_name.as_bytes()
         ],
         bump,
     )]
@@ -236,7 +238,8 @@ pub struct UsePass<'info> {
 pub struct Organization {
     owner: Pubkey,
     metadata_cid: String,
-    authorized_keys: Vec<Pubkey>
+    authorized_keys: Vec<Pubkey>,
+    total_benefits: u16
 }
 
 #[account]
@@ -250,7 +253,7 @@ pub struct Pass {
     customer: Pubkey,
     template: Pubkey,
     organization: Pubkey,
-    expiry_timestamp: u64,
+    expiry_timestamp: u32,
     initial_points: u32,
     points_left: u32
 }

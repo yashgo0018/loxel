@@ -103,4 +103,97 @@ describe("loxel", () => {
     assert.equal(pass.organization.toString(), organization_pda.toString());
     assert.equal(pass.name, passDetails.name);
   });
+
+  it("Should not issue the pass if the pass template is not created", async () => {
+    try {
+      await program.methods.issueLoyaltyPass(provider.wallet.publicKey, "The Invalid Pass".toString(), keys[5].publicKey, new Date().getTime() / 1000 | 0, 100).rpc();
+    } catch (e) {
+      return;
+    }
+    assert.fail("didn't throw any error");
+  });
+
+  it("Should not issue the pass if the api key is not authorized", async () => {
+    // user creates transaction
+    const transaction = await program.methods.issueLoyaltyPass(provider.wallet.publicKey, "Gold Pass".toString(), keys[5].publicKey, new Date().getTime() / 1000 | 0, 100).accounts({authorizedKey: keys[4].publicKey}).transaction();
+    const { blockhash } = await provider.connection.getLatestBlockhash();
+
+    // user makes the server the fee payer
+    transaction.feePayer = provider.wallet.publicKey;
+    transaction.recentBlockhash = blockhash;
+
+    // user signs transaction
+    transaction.partialSign(keys[4])
+
+    // user serialized transaction + sends to server
+    const serialized = transaction.serialize({requireAllSignatures: false})
+
+    // server deserialized received transaction
+    const transactionOnServer = anchor.web3.Transaction.from(serialized);
+
+    try {
+      // server signs + sends transaction
+      await provider.sendAndConfirm(transactionOnServer)
+    } catch (e) {
+      return
+    }
+    assert.fail("didn't throw any error");
+  });
+
+  it("Should issue the pass", async () => {
+    // user creates transaction
+    const transaction = await program.methods.issueLoyaltyPass(provider.wallet.publicKey, "Gold Pass".toString(), keys[5].publicKey, new Date().getTime() / 1000 | 0, 100).accounts({authorizedKey: keys[1].publicKey}).transaction();
+    const { blockhash } = await provider.connection.getLatestBlockhash();
+
+    // user makes the server the fee payer
+    transaction.feePayer = provider.wallet.publicKey;
+    transaction.recentBlockhash = blockhash;
+
+    // user signs transaction
+    transaction.partialSign(keys[1])
+
+    // user serialized transaction + sends to server
+    const serialized = transaction.serialize({requireAllSignatures: false})
+
+    // server deserialized received transaction
+    const transactionOnServer = anchor.web3.Transaction.from(serialized);
+
+    // server signs + sends transaction
+    await provider.sendAndConfirm(transactionOnServer)
+
+    const [organization_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("ORGANIZATION"), provider.wallet.publicKey.toBuffer()], program.programId);
+    const [pass_template_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("PASS_TEMPLATE"), organization_pda.toBuffer(), Buffer.from("Gold Pass")], program.programId);
+    const [pass_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("PASS"), pass_template_pda.toBuffer(), keys[5].publicKey.toBuffer()], program.programId)
+    const pass = await program.account.pass.fetch(pass_pda);
+    console.log(pass);
+    assert.equal(pass.pointsLeft, 100);
+  });
+
+  it("Should deduct points from the pass", async () => {
+    // user creates transaction
+    const transaction = await program.methods.deductPoints(provider.wallet.publicKey, "Gold Pass".toString(), keys[5].publicKey, 2).accounts({authorizedKey: keys[1].publicKey}).transaction();
+    const { blockhash } = await provider.connection.getLatestBlockhash();
+
+    // user makes the server the fee payer
+    transaction.feePayer = provider.wallet.publicKey;
+    transaction.recentBlockhash = blockhash;
+
+    // user signs transaction
+    transaction.partialSign(keys[1])
+
+    // user serialized transaction + sends to server
+    const serialized = transaction.serialize({requireAllSignatures: false})
+
+    // server deserialized received transaction
+    const transactionOnServer = anchor.web3.Transaction.from(serialized);
+
+    // server signs + sends transaction
+    await provider.sendAndConfirm(transactionOnServer)
+
+    const [organization_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("ORGANIZATION"), provider.wallet.publicKey.toBuffer()], program.programId);
+    const [pass_template_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("PASS_TEMPLATE"), organization_pda.toBuffer(), Buffer.from("Gold Pass")], program.programId);
+    const [pass_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("PASS"), pass_template_pda.toBuffer(), keys[5].publicKey.toBuffer()], program.programId)
+    const pass = await program.account.pass.fetch(pass_pda);
+    assert.equal(pass.pointsLeft, 98);
+  });
 });

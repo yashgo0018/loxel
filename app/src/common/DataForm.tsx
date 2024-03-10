@@ -6,7 +6,7 @@ export default function DataForm(
     HTMLFormElement
   >
 ) {
-  const { onSubmit, children, ...otherProps } = props;
+  const { onSubmit, onChange, children, ...otherProps } = props;
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,8 +21,21 @@ export default function DataForm(
     onSubmit && onSubmit(event);
   }
 
+  function changeHandler(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    let res: Record<string, string> = {};
+
+    [...data.entries()].forEach((entry) => {
+      res[entry[0]] = entry[1] as string;
+    });
+
+    onChange && onChange(event);
+  }
+
   return (
-    <form onSubmit={submitHandler} {...otherProps}>
+    <form onSubmit={submitHandler} onChange={changeHandler} {...otherProps}>
       {children}
     </form>
   );

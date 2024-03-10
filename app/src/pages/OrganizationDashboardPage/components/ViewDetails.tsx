@@ -16,9 +16,9 @@ export default function ViewDetails(props: {
         <button className="flex gap-x-1 items-center justify-center text-md border px-4 py-2 rounded-md border-primary duration-150 ease-in whitespace-nowrap" onClick={props.data.onClickFunction}>
           {props.data.buttonLabel}
         </button>
-        <p className="opacity-60 flex items-center gap-x-2">
+        <div className="opacity-60 flex items-center gap-x-2">
           {props.data.label}
-        </p>
+        </div>
       </div>
       {props.data.searchBarQuery && (
         <div className="flex items-center gap-x-2 border border-front/20 px-2 rounded-md min-w-[40%]">

@@ -217,12 +217,13 @@ pub struct RegisterOrganization<'info> {
             owner.key().as_ref()
         ],
         bump,
-        payer=owner,
+        payer=relayer,
         space=8+32+(4+59)+(4+32*10)+2
     )]
     pub organization_pda: Account<'info, Organization>,
-    #[account(mut)]
     pub owner: Signer<'info>,
+    #[account(mut)]
+    pub relayer: Signer<'info>,
     pub system_program: Program<'info, System>
 }
 

@@ -79,6 +79,7 @@ export default function Pass(props: PassProps) {
               <img
                 className="absolute-cover aspect-square object-cover rounded-full"
                 src={data.logo.url}
+                alt="preview"
               />
               <div className="absolute-cover mix-blend-hue bg-B rounded-full" />
             </figure>

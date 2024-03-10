@@ -13,7 +13,7 @@ export default function ViewDeatils(props: {
   return (
     <div className={props.className}>
       <div className="flex items-center gap-x-4 justify-between">
-        <button className="flex gap-x-1 items-center justify-center text-md border px-4 py-2 rounded-md border-primary duration-150 ease-in" onClick={props.data.onClickFunction}>
+        <button className="flex gap-x-1 items-center justify-center text-md border px-4 py-2 rounded-md border-primary duration-150 ease-in whitespace-nowrap" onClick={props.data.onClickFunction}>
           {props.data.buttonLabel}
         </button>
         <p className="opacity-60 flex items-center gap-x-2">

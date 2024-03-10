@@ -4,14 +4,17 @@ import NavbarSeperator from "./components/NavbarSeperator";
 import usePopoverDrawer from "../../hooks/usePopoverDrawer";
 import Forms from "../Forms";
 import { useState } from "react";
+import { useAccount } from "@particle-network/connect-react-ui";
 import LocaleSwitch from "./components/LocaleSwitch";
 import {
   ConnectButton,
   useParticleTheme,
 } from "@particle-network/connect-react-ui";
-import "@particle-network/connect-react-ui/dist/index.css";
+import { twMerge } from "tailwind-merge";
 
 export default function Navbar() {
+  const account = useAccount();
+
   const drawer = usePopoverDrawer();
 
   function getStartedAction() {
@@ -34,15 +37,31 @@ export default function Navbar() {
         <NavbarAction type="link" title="Dapp" to="/dapp" />
       </div>
 
-      <div className="flex-1 flex items-center gap-x-8 justify-end">
+      <div
+        className={twMerge(
+          "flex-1 flex items-center gap-x-8 justify-end",
+          account && "flex-row-reverse justify-start",
+        )}
+      >
         <LocaleSwitch />
-        <button
-          className="px-6 py-2 bg-primary text-back rounded-md font-medium"
-          onClick={getStartedAction}
+        <div
+          className={twMerge("relative group", !account && "overflow-hidden")}
         >
-          Get Started
-        </button>
-        <ConnectButton />
+          <button
+            className={twMerge(
+              "px-6 py-2 bg-primary text-back rounded-md font-medium pointer-events-none",
+              account && "hidden",
+            )}
+            onClick={getStartedAction}
+          >
+            Get Started
+          </button>
+          <div
+            className={twMerge("w-max", !account && "absolute-cover opacity-0")}
+          >
+            <ConnectButton />
+          </div>
+        </div>
       </div>
     </nav>
   );

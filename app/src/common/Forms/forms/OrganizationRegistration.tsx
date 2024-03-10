@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import DataForm from "../../DataForm";
 import CommonFormInput from "../CommonFormInput";
+import { useNavigate } from "react-router-dom";
 
 interface OrganizationRegistrationProps {
   className?: string;
@@ -12,9 +13,14 @@ export default function OrganizationRegistration(
 ) {
   const [imgUrl, setImgUrl] = useState("");
 
+  const navigate = useNavigate();
+
   return (
     <DataForm
       className={twMerge("flex flex-col items-stretch p-8", props.className)}
+      onSubmit={() => {
+        navigate("/org/dashboard");
+      }}
     >
       <h1 className="font-semibold tracking-tight text-3xl text-center">
         Register Your Organization

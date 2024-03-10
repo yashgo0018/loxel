@@ -23,6 +23,7 @@ export default function OrganizationRegistration(
       <img
         className="w-1/3 aspect-square self-center rounded-full object-cover outline outline-front/20 outline-offset-2 mt-6"
         src={imgUrl}
+        alt="preview"
         onError={(e) =>
           (e.currentTarget.src =
             "https://www.coherentmarketinsights.com/images/testimg/defultlogo.jpg")

@@ -5,6 +5,11 @@ import usePopoverDrawer from "../../hooks/usePopoverDrawer";
 import Forms from "../Forms";
 import { useState } from "react";
 import LocaleSwitch from "./components/LocaleSwitch";
+import {
+  ConnectButton,
+  useParticleTheme,
+} from "@particle-network/connect-react-ui";
+import "@particle-network/connect-react-ui/dist/index.css";
 
 export default function Navbar() {
   const drawer = usePopoverDrawer();
@@ -17,7 +22,7 @@ export default function Navbar() {
     <nav className="p-page py-5 flex justify-center items-center fixed w-full z-[10000] bg-background/50 backdrop-blur-sm">
       <div className="flex-1">
         <Link to="/">
-          <img src="/brand.svg" className="h-10" />
+          <img src="/brand.svg" alt="brand" className="h-10" />
         </Link>
       </div>
 
@@ -37,6 +42,7 @@ export default function Navbar() {
         >
           Get Started
         </button>
+        <ConnectButton />
       </div>
     </nav>
   );

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { passPlaceholderData } from "../../../config";
 import { TextureType, getTextureTypeArray } from "../../../config/textures";
 import Pass from "../../Pass";
+import Wrapper3dHover from "../../Wrapper3dHover";
 
 interface PassCreationProps {
   className?: string;
@@ -23,7 +24,9 @@ export default function PassCreation(props: PassCreationProps) {
       className={twMerge("relative flex items-stretch p-8", props.className)}
     >
       <div className="sticky top-0 basis-1/2 flex flex-col justify-center p-8 h-max">
-        <Pass className="w-full shadow-lg shadow-front/25" data={passData} />
+        <Wrapper3dHover className="duration-75">
+          <Pass className="w-full" data={passData} />
+        </Wrapper3dHover>
       </div>
       <div className="flex flex-col basis-1/2">
         <DataForm

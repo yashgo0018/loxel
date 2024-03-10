@@ -16,11 +16,11 @@ export default function AnalyticsView() {
         </div>
 
         <div className="flex-1 p-10 rounded-2xl border border-front/15 flex flex-col">
-          <h3 className="mb-1 font-semibold">Benifits Claimed</h3>
+          <h3 className="mb-1 font-semibold">benefits Claimed</h3>
           <span className="mb-8 text-sm text-front/40">
             +300% from last month
           </span>
-          <LineChart data={dummyBenifitsClaimed} />
+          <LineChart data={dummybenefitsClaimed} />
         </div>
       </div>
 
@@ -49,7 +49,7 @@ const dummyIssuedPasses = {
   values: [3, 10, 20, 17, 32, 44, 56, 30],
 };
 
-const dummyBenifitsClaimed = {
+const dummybenefitsClaimed = {
   labels: [
     "August",
     "September",

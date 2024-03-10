@@ -29,14 +29,14 @@ export default function ApiCard() {
             </button>
           </div>
 
-          <LineChart data={dummyBenifitsClaimed} className="w-3/5 self-center" />
+          <LineChart data={dummybenefitsClaimed} className="w-3/5 self-center" />
         </div>
       </div>
     </div>
   );
 }
 
-const dummyBenifitsClaimed = {
+const dummybenefitsClaimed = {
   labels: [
     "August",
     "September",

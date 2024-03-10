@@ -4,6 +4,8 @@ import CommonFormInput from "../CommonFormInput";
 import { twMerge } from "tailwind-merge";
 import Pass from "../../Pass";
 import Dropdown from "../../Dropdown";
+import { PassData } from "../../../types";
+import { useState } from "react";
 
 interface PassCreationProps {
   className?: string;
@@ -11,29 +13,28 @@ interface PassCreationProps {
 
 export default function PassCreation(props: PassCreationProps) {
   const textureType = ["wood", "glass", "metal", "matte"];
+  const [passData, setPassData] = useState<PassData>({
+    passName: "Shoppers Black",
+    userName: "Spandan Barve",
+    colors: {
+      primary: "#11211B",
+      secondary: "#a67c00",
+      text: { primary: "#ffffff", secondary: "#000000" },
+    },
+    textures: { primary: "matte", secondary: "glass" },
+    logo: {
+      url: "https://watcher.guru/news/wp-content/uploads/2023/12/avax-800x450.jpg.webp",
+    },
+    expiry: 1830066943000,
+    usage: { total: 10, used: 6 },
+  });
+
   return (
     <DataForm
       className={twMerge("relative flex items-stretch p-8", props.className)}
     >
       <div className="sticky top-0 basis-1/2 flex flex-col justify-center p-8 h-max">
-        <Pass
-          className="w-full shadow-lg shadow-front/25"
-          data={{
-            passName: "Shoppers Black",
-            userName: "Spandan Barve",
-            colors: {
-              primary: "#11211B",
-              secondary: "#a67c00",
-              text: { primary: "#ffffff", secondary: "#000000" },
-            },
-            textures: { primary: "matte", secondary: "glass" },
-            logo: {
-              url: "https://watcher.guru/news/wp-content/uploads/2023/12/avax-800x450.jpg.webp",
-            },
-            expiry: 1830066943000,
-            usage: { total: 10, used: 6 },
-          }}
-        />
+        <Pass className="w-full shadow-lg shadow-front/25" data={passData} />
       </div>
       <div className="flex flex-col basis-1/2">
         <DataForm className="flex flex-col gap-y-4">
@@ -85,7 +86,6 @@ export default function PassCreation(props: PassCreationProps) {
             <p>Provide your logo URL</p>
             <CommonFormInput name="logoUrl" type="text" />
           </div>
-
           <div className="flex flex-col gap-y-1">
             <p>Select card colors</p>
             <div className="flex gap-x-4 justify-between items-baseline">

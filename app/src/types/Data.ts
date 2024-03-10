@@ -1,4 +1,4 @@
-export type TextureType = "wood" | "glass" | "metal" | "matte";
+import { TextureType } from "../common/Pass";
 
 export interface PassData {
   textures: { primary: TextureType; secondary: TextureType };

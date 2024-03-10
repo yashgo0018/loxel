@@ -2,9 +2,9 @@ import React from "react";
 import DataForm from "../../DataForm";
 import CommonFormInput from "../CommonFormInput";
 import { twMerge } from "tailwind-merge";
-import Pass from "../../Pass";
+import Pass, { TextureType, getTextureTypeArray } from "../../Pass";
 import Dropdown from "../../Dropdown";
-import { PassData, TextureType } from "../../../types";
+import { PassData } from "../../../types";
 import { useState } from "react";
 import { passPlaceholderData } from "../../../config";
 
@@ -13,7 +13,8 @@ interface PassCreationProps {
 }
 
 export default function PassCreation(props: PassCreationProps) {
-  const textureType = ["matte", "wood", "glass", "metal"];
+  const textureType = getTextureTypeArray();
+
   const [passData, setPassData] = useState<PassData>(passPlaceholderData);
 
   return (
@@ -57,7 +58,7 @@ export default function PassCreation(props: PassCreationProps) {
                   name="primaryTexture"
                   id="primary-texture"
                   defaultValue="matte"
-                  className="bg-background border-primary border text-front pl-2 py-2 rounded-md outline-none capitalize"
+                  className="bg-background border-front/25 focus:border-primary border text-front pl-2 py-2 rounded-md outline-none capitalize"
                 >
                   {textureType.map((texture, key) => (
                     <option value={texture} key={key} className="capitalize">
@@ -71,7 +72,7 @@ export default function PassCreation(props: PassCreationProps) {
                 <select
                   name="secondaryTexture"
                   id="secondary-texture"
-                  className="bg-background border-primary border text-front pl-2 py-2 rounded-md outline-none capitalize"
+                  className="bg-background border-front/25 focus:border-primary border text-front pl-2 py-2 rounded-md outline-none capitalize"
                   defaultValue="glass"
                 >
                   {textureType.map((texture, key) => (

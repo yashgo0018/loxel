@@ -4,47 +4,59 @@ import CommonFormInput from "../CommonFormInput";
 import { twMerge } from "tailwind-merge";
 import Pass from "../../Pass";
 import Dropdown from "../../Dropdown";
+import { PassData, TextureType } from "../../../types";
+import { useState } from "react";
+import { passPlaceholderData } from "../../../config";
 
 interface PassCreationProps {
   className?: string;
 }
 
 export default function PassCreation(props: PassCreationProps) {
-  const textureType = ["wood", "glass", "metal", "matte"];
+  const textureType = ["matte", "wood", "glass", "metal"];
+  const [passData, setPassData] = useState<PassData>(passPlaceholderData);
+
   return (
-    <DataForm
+    <div
       className={twMerge("relative flex items-stretch p-8", props.className)}
     >
       <div className="sticky top-0 basis-1/2 flex flex-col justify-center p-8 h-max">
-        <Pass
-          className="w-full shadow-lg shadow-front/25"
-          data={{
-            passName: "Shoppers Black",
-            userName: "Spandan Barve",
-            colors: {
-              primary: "#11211B",
-              secondary: "#a67c00",
-              text: { primary: "#ffffff", secondary: "#000000" },
-            },
-            textures: { primary: "matte", secondary: "glass" },
-            logo: {
-              url: "https://watcher.guru/news/wp-content/uploads/2023/12/avax-800x450.jpg.webp",
-            },
-            expiry: 1830066943000,
-            usage: { total: 10, used: 6 },
-          }}
-        />
+        <Pass className="w-full shadow-lg shadow-front/25" data={passData} />
       </div>
       <div className="flex flex-col basis-1/2">
-        <DataForm className="flex flex-col gap-y-4">
+        <DataForm
+          className="flex flex-col gap-y-6"
+          onChange={(data) => {
+            setPassData((p) => ({
+              ...p,
+              colors: {
+                primary: data.primaryColor,
+                secondary: data.secondaryColor,
+                text: {
+                  primary: data.textPrimaryColor,
+                  secondary: data.textSecondaryColor,
+                },
+              },
+              textures: {
+                primary: data.primaryTexture as TextureType,
+                secondary: data.secondaryTexture as TextureType,
+              },
+              passName: data.passName,
+              logo: {
+                url: data.logoUrl,
+              },
+            }));
+          }}
+        >
           <div className="flex flex-col gap-y-1">
             <p>Select card Texture</p>
             <div className="flex w-full gap-x-4">
               <div className="flex flex-col gap-y-1 w-[49%]">
                 <p className="opacity-50 text-sm">Primary Texture</p>
                 <select
-                  name="Primary"
-                  id="primary"
+                  name="primaryTexture"
+                  id="primary-texture"
+                  defaultValue="matte"
                   className="bg-background border-primary border text-front pl-2 py-2 rounded-md outline-none capitalize"
                 >
                   {textureType.map((texture, key) => (
@@ -57,9 +69,10 @@ export default function PassCreation(props: PassCreationProps) {
               <div className="flex flex-col gap-y-1 w-[49%]">
                 <p className="opacity-50 text-sm">Secondary Texture</p>
                 <select
-                  name="Primary"
-                  id="primary"
+                  name="secondaryTexture"
+                  id="secondary-texture"
                   className="bg-background border-primary border text-front pl-2 py-2 rounded-md outline-none capitalize"
+                  defaultValue="glass"
                 >
                   {textureType.map((texture, key) => (
                     <option value={texture} key={key} className="capitalize">
@@ -73,19 +86,21 @@ export default function PassCreation(props: PassCreationProps) {
 
           <div className="flex flex-col gap-y-1">
             <p>Pass Name</p>
-            <CommonFormInput name="passName" type="text" />
-          </div>
-
-          <div className="flex flex-col gap-y-1">
-            <p>User Name</p>
-            <CommonFormInput name="userName" type="text" />
+            <CommonFormInput
+              name="passName"
+              type="string"
+              defaultValue={passData.passName}
+            />
           </div>
 
           <div className="flex flex-col gap-y-1">
             <p>Provide your logo URL</p>
-            <CommonFormInput name="logoUrl" type="text" />
+            <CommonFormInput
+              name="logoUrl"
+              type="text"
+              defaultValue={passData.logo.url}
+            />
           </div>
-
           <div className="flex flex-col gap-y-1">
             <p>Select card colors</p>
             <div className="flex gap-x-4 justify-between items-baseline">
@@ -95,6 +110,7 @@ export default function PassCreation(props: PassCreationProps) {
                   name="primaryColor"
                   className="p-0 border-none size-10"
                   type="color"
+                  defaultValue={passData.colors.primary}
                 />
               </div>
               <div className="">
@@ -103,6 +119,7 @@ export default function PassCreation(props: PassCreationProps) {
                   name="secondaryColor"
                   className="p-0 border-none size-10"
                   type="color"
+                  defaultValue={passData.colors.secondary}
                 />
               </div>
               <div className="">
@@ -111,6 +128,7 @@ export default function PassCreation(props: PassCreationProps) {
                   name="textPrimaryColor"
                   className="p-0 border-none size-10"
                   type="color"
+                  defaultValue={passData.colors.text.primary}
                 />
               </div>
               <div className="">
@@ -119,6 +137,7 @@ export default function PassCreation(props: PassCreationProps) {
                   name="textSecondaryColor"
                   className="p-0 border-none size-10"
                   type="color"
+                  defaultValue={passData.colors.text.secondary}
                 />
               </div>
             </div>
@@ -128,6 +147,6 @@ export default function PassCreation(props: PassCreationProps) {
           </button>
         </DataForm>
       </div>
-    </DataForm>
+    </div>
   );
 }

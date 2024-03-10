@@ -1,6 +1,6 @@
 import Icon from "../../../common/Icon";
 
-export default function ViewDeatils(props: {
+export default function ViewDetails(props: {
   className?: string;
   data: {
     label: React.ReactNode;

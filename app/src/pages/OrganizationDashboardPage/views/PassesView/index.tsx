@@ -6,7 +6,7 @@ import Forms from "../../../../common/Forms";
 import Icon from "../../../../common/Icon";
 import ViewDeatils from "../../components/ViewDetails";
 
-export default function Passes() {
+export default function PassesView() {
   const drawer = usePopoverDrawer();
 
   const passes = dummyPasses;
@@ -29,7 +29,7 @@ export default function Passes() {
         <h1 className="font-medium">Passes : {passes.length} / 100</h1>
         <p className="text-xs text-front/60">
           Each pass you issue represents the level of involvement of a user with
-          your brand. Passes are required in order to avail benifits.
+          your brand.<br/> Passes are required in order to avail benifits.
         </p>
       </div>
     ),

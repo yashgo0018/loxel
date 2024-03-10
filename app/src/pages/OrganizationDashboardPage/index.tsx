@@ -3,17 +3,18 @@ import Header from "./components/Header";
 import PageSeparator from "../../common/PageSeparator";
 import Tabs from "../../common/Tabs";
 import AnalyticsView from "./views/AnalyticsView";
-import Passes from "./views/Passes";
-import Developer from "./views/Developer";
+import PassesView from "./views/PassesView";
+import DeveloperView from "./views/DeveloperView";
+import BenifitsView from "./views/BenifitsView";
 
 export default function OrganizationDashboardPage() {
   const [viewElement, setViewElement] = useState<React.ReactNode>();
 
   const tabs = [
-    { title: "Passes", element: <Passes /> },
-    { title: "Benifits" },
+    { title: "Passes", element: <PassesView /> },
+    { title: "Benifits", element: <BenifitsView /> },
     { title: "Analytics", element: <AnalyticsView /> },
-    { title: "Developer", element: <Developer /> },
+    { title: "Developer", element: <DeveloperView /> },
     { title: "Settings" },
   ];
 

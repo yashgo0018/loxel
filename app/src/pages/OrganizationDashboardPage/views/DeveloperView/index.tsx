@@ -3,7 +3,7 @@ import Icon from "../../../../common/Icon";
 import ViewDeatils from "../../components/ViewDetails";
 import ApiCard from "./components/ApiCard";
 
-export default function Developer() {
+export default function DeveloperView() {
   return (
     <article className="py-6 flex flex-col gap-y-6">
       <ViewDeatils data={data} className="flex justify-between" />

@@ -22,7 +22,7 @@ export default function benefitsView() {
 const data = {
   label: (
     <>
-      2 / 100 benefits Created
+      4 / 100 benefits Created
       <Icon icon="help" className="text-[1.3rem]" />
     </>
   ),
@@ -36,14 +36,13 @@ const data = {
   ),
 };
 
-
 const dummyPasses = [
   {
-    passName: "Youtube Kids",
-    userName: "Spandan Barve",
+    passName: "$50 Off",
+    userName: "Purchase Value :\n$500 or above",
     colors: {
       primary: "#6c736d",
-      secondary: "#0d751d",
+      secondary: "#d03d4d",
       text: { primary: "#fefefe", secondary: "#fefefe" },
     },
     textures: { primary: "feather", secondary: "glass" },
@@ -54,11 +53,11 @@ const dummyPasses = [
     usage: { total: 10, used: 2 },
   },
   {
-    passName: "Youtube Advanced",
-    userName: "Riya Jain",
+    passName: "Flat 15% off",
+    userName: "Use this coupon across marsian.shop",
     colors: {
-      primary: "#101010",
-      secondary: "#b00b1f",
+      primary: "#e13e14",
+      secondary: "#000",
       text: { primary: "#ffffff", secondary: "#fefefe" },
     },
     textures: { primary: "america", secondary: "glass" },
@@ -71,17 +70,32 @@ const dummyPasses = [
 
   {
     passName: "5% off",
-    userName: "min purchase $500",
+    userName: "Valid on all purchases\nover $20 on parent site",
     colors: {
-      primary: "#0d0d0d",
-      secondary: "#a4861f",
-      text: { primary: "#ffffff", secondary: "#000000" },
+      primary: "#3d7d7d",
+      secondary: "#30d2e2",
+      text: { primary: "#000000", secondary: "#000000" },
     },
-    textures: { primary: "metal", secondary: "hyper" },
+    textures: { primary: "bubble", secondary: "hyper" },
     logo: {
       url: "https://styles.redditmedia.com/t5_ild9e/styles/communityIcon_8ikf8h653cac1.png",
     },
     expiry: 1930066943000,
     usage: { total: 10, used: 5 },
   },
-] as const
+  {
+    passName: "$15 off",
+    userName: "Purchase items worth $150",
+    colors: {
+      primary: "#000000",
+      secondary: "#a4861f",
+      text: { primary: "#ffffff", secondary: "#000000" },
+    },
+    textures: { primary: "jaipur", secondary: "hyper" },
+    logo: {
+      url: "https://styles.redditmedia.com/t5_ild9e/styles/communityIcon_8ikf8h653cac1.png",
+    },
+    expiry: 1930066943000,
+    usage: { total: 10, used: 5 },
+  },
+] as const;

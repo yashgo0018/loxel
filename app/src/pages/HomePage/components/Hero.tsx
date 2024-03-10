@@ -1,4 +1,9 @@
+import { Link } from "react-router-dom";
+import usePopoverDrawer from "../../../hooks/usePopoverDrawer";
+import Forms from "../../../common/Forms";
+
 export default function Hero() {
+  const drawer = usePopoverDrawer();
   return (
     <section className="h-screen pt-32 flex flex-col items-center relative">
       <img
@@ -11,7 +16,7 @@ export default function Hero() {
         <div className="animate-[hero-text_25000ms_infinite] after:animate-[hero-text_25000ms_infinite]" />
       </div>
 
-      <div className="text-primary mt-14 text-xl text-center">
+      <div className="text-primary mt-8 text-xl text-center">
         Loxel Brings it all together
         <br />
         Streamline your customer loyalty / rewards system today!
@@ -22,6 +27,12 @@ export default function Hero() {
         <br />
         Leverage the power of AI to reward your most valuable consumers
       </p>
+      <button
+        onClick={() => drawer.show(<Forms.OrganizationRegistration />)}
+        className="bg-primary px-8 py-2 mt-6 rounded-md text-back font-semibold"
+      >
+        Register Organisation
+      </button>
     </section>
   );
 }

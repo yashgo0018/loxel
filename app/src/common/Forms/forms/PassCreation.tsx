@@ -19,9 +19,14 @@ export default function PassCreation(props: PassCreationProps) {
 
   const [passData, setPassData] = useState<PassData>(passPlaceholderData);
 
+  const [passType, setPassType] = useState(0);
+
   return (
     <div
-      className={twMerge("relative flex items-stretch p-8", props.className)}
+      className={twMerge(
+        "relative flex items-stretch pt-4 pb-8",
+        props.className,
+      )}
     >
       <div className="sticky top-0 basis-1/2 flex flex-col justify-center p-8 h-max">
         <Wrapper3dHover className="duration-75">
@@ -30,7 +35,7 @@ export default function PassCreation(props: PassCreationProps) {
       </div>
       <div className="flex flex-col basis-1/2">
         <DataForm
-          className="flex flex-col gap-y-6"
+          className="flex flex-col gap-y-4"
           onChange={(data) => {
             setPassData((p) => ({
               ...p,
@@ -53,6 +58,20 @@ export default function PassCreation(props: PassCreationProps) {
             }));
           }}
         >
+          <div className="self-end">
+            <button
+              className={twMerge("border rounded-l-md py-2 px-4 duration-200 ease-linear font-medium", passType === 0 && "bg-primary text-black")}
+              onClick={() => setPassType(0)}
+            >
+              Issued Card
+            </button>
+            <button
+              className={twMerge("border rounded-r-md py-2 px-4 duration-200 ease-linear font-medium", passType === 1 && "bg-primary text-black")}
+              onClick={() => setPassType(1)}
+            >
+              Selling Card
+            </button>
+          </div>
           <div className="flex flex-col gap-y-1">
             <p>Select card Texture</p>
             <div className="flex w-full gap-x-4">
@@ -147,9 +166,17 @@ export default function PassCreation(props: PassCreationProps) {
               </div>
             </div>
           </div>
-          <button className="border border-primary px-4 py-1 w-max self-end rounded-md">
-            Create
-          </button>
+          <div className={twMerge("flex w-full justify-end", passType === 1 && "justify-between")}>
+            {passType === 1 && (
+              <div className="flex flex-col gap-y-1">
+                <p>Initial price</p>
+                <CommonFormInput name="initialPrice" type="number" />
+              </div>
+            )}
+            <button className="border border-primary px-4 py-1 w-max self-end rounded-md">
+              Create
+            </button>
+          </div>
         </DataForm>
       </div>
     </div>

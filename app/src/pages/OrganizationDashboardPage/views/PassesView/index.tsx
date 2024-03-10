@@ -29,7 +29,7 @@ export default function PassesView() {
         <h1 className="font-medium">Passes : {passes.length} / 100</h1>
         <p className="text-xs text-front/60">
           Each pass you issue represents the level of involvement of a user with
-          your brand.<br/> Passes are required in order to avail benifits.
+          your brand.<br/> Passes are required in order to avail benefits.
         </p>
       </div>
     ),

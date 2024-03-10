@@ -5,7 +5,7 @@ import Icon from "../../../../../common/Icon";
 import { twMerge } from "tailwind-merge";
 
 export default function UsersTable() {
-  const titles = ["Email", "Passes", "Benifits Availed"] as const;
+  const titles = ["Email", "Passes", "benefits Availed"] as const;
   type DataEntry = Record<TupleToUnion<typeof titles>, React.ReactNode>;
 
   const [formattedData, setFormattedData] = useState<Array<DataEntry>>();
@@ -34,9 +34,9 @@ export default function UsersTable() {
       let entry: Partial<DataEntry> = {};
       entry["Email"] = user.email;
       entry["Passes"] = getPassesString(user.passes);
-      entry["Benifits Availed"] = (
+      entry["benefits Availed"] = (
         <div>
-          <p>{user.claims.count} Benifits Claimed</p>
+          <p>{user.claims.count} benefits Claimed</p>
           <p className="text-xs text-primary/60">
             {"("}
             Worth <FormattedCurrency usd={user.claims.amount} />
@@ -85,7 +85,7 @@ export default function UsersTable() {
             </div>
             <div className="w-[35%] truncate">{entry.Email}</div>
             <div className="w-[30%] truncate">{entry.Passes}</div>
-            <div className="w-[30%] truncate">{entry["Benifits Availed"]}</div>
+            <div className="w-[30%] truncate">{entry["benefits Availed"]}</div>
           </div>
         ))}
       </div>

@@ -40,7 +40,7 @@ export default function PassesView() {
   return (
     <article className="flex flex-col gap-y-6">
       <ViewDeatils
-        className="flex w-full my-10 gap-x-8"
+        className="flex w-full my-10 gap-x-8 justify-between"
         data={ViewDetailsData}
       />
       <div className="flex h-full flex-wrap justify-between gap-y-10">

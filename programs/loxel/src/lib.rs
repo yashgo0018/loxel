@@ -60,11 +60,12 @@ pub mod loxel {
         Ok(())
     }
 
-    pub fn add_loyalty_pass(ctx: Context<AddLoyaltyPass>, name: String) -> Result<()> {
+    pub fn add_loyalty_pass(ctx: Context<AddLoyaltyPass>, name: String, issue_condition: String) -> Result<()> {
         let pass_template = &mut ctx.accounts.pass_template_pda;
 
         pass_template.organization = ctx.accounts.organization_pda.key();
         pass_template.name = name;
+        pass_template.issue_condition = issue_condition;
 
         Ok(())
     }
@@ -95,6 +96,69 @@ pub mod loxel {
             return err!(OrganizationError::InsufficientPoints);
         }
         pass.points_left -= points;
+
+        Ok(())
+    }
+
+    pub fn create_benefit(ctx: Context<CreateBenefit>, organization_owner: Pubkey, title: String, metadata_cid: String, worth: u32) -> Result<()> {
+        let organization = &mut ctx.accounts.organization_pda;
+        let benefit = &mut ctx.accounts.benefit_pda;
+
+
+
+        benefit.organization = organization.key();
+        benefit.title = title;
+        benefit.metadata_cid = metadata_cid;
+        benefit.worth = worth;
+
+        Ok(())
+    }
+
+    pub fn add_eligible_pass(ctx: Context<ManageBenefit>, organization_owner: Pubkey, title: String, pass_name: String) -> Result<()> {
+        let benefit = &mut ctx.accounts.benefit_pda;
+
+        if benefit.eligible_passes.len() == 10 {
+            return err!(OrganizationError::MaxPassLimitReached);
+        }
+
+        // check if the authorized key is already added
+        for i in 0..benefit.eligible_passes.len() {
+            if benefit.eligible_passes[i] == ctx.accounts.pass_template_pda.key() {
+                return err!(OrganizationError::PassAlreadyEligible);
+            }
+        }
+
+        benefit.eligible_passes.push(ctx.accounts.pass_template_pda.key());
+
+        Ok(())
+    }
+
+    pub fn remove_eligible_pass(ctx: Context<ManageBenefit>, organization_owner: Pubkey, title: String, pass_name: String) -> Result<()> {
+        let benefit = &mut ctx.accounts.benefit_pda;
+
+        let mut key_found = usize::MAX;
+
+        for i in 0..benefit.eligible_passes.len() {
+            if benefit.eligible_passes[i] == ctx.accounts.pass_template_pda.key() {
+                key_found = i;
+            }
+        }
+
+        if key_found == usize::MAX {
+            return err!(OrganizationError::PassNotFound);
+        }
+
+        benefit.eligible_passes.remove(key_found);
+
+        Ok(())
+    }
+
+    pub fn redeem_benefit(ctx: Context<RedeemBenefit>, organization_owner: Pubkey, benefit_title: String, pass_name: String) -> Result<()> {
+        let pass = &mut ctx.accounts.pass_pda;
+        if pass.points_left == 0 {
+            return err!(OrganizationError::InsufficientPoints);
+        }
+        pass.points_left-=1;
 
         Ok(())
     }
@@ -136,7 +200,7 @@ pub struct KeyChange<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(name:String)]
+#[instruction(name:String, issue_condition:String)]
 pub struct AddLoyaltyPass<'info> {
     #[account(
         seeds=[
@@ -155,7 +219,7 @@ pub struct AddLoyaltyPass<'info> {
         ],
         bump,
         payer=owner,
-        space=8+32+(4+name.len())
+        space=8+32+(4+name.len())+(4+issue_condition.len())
     )]
     pub pass_template_pda: Account<'info, PassTemplate>,
     #[account(mut)]
@@ -231,7 +295,115 @@ pub struct UsePass<'info> {
         bump,
     )]
     pub pass_pda: Account<'info, Pass>,
-    pub authorized_key: Signer<'info>
+    pub authorized_key: Signer<'info>,
+    pub server: Signer<'info>
+}
+
+#[derive(Accounts)]
+#[instruction(organization_owner:Pubkey, title:String)]
+pub struct CreateBenefit<'info> {
+    #[account(
+        mut,
+        seeds=[
+            "ORGANIZATION".as_bytes(),
+            organization_owner.as_ref()
+        ],
+        bump,
+    )]
+    pub organization_pda: Account<'info, Organization>,
+    #[account(
+        init,
+        seeds=[
+            "BENEFIT".as_bytes(),
+            organization_pda.key().as_ref(),
+            title.as_bytes()
+        ],
+        bump,
+        payer=server,
+        space=8+32+(4+title.len())+(4+59)+4+(4+32*10)
+    )]
+    pub benefit_pda: Account<'info, Benefit>,
+    pub authorized_key: Signer<'info>,
+    #[account(mut)]
+    pub server: Signer<'info>,
+    pub system_program: Program<'info, System>
+}
+
+#[derive(Accounts)]
+#[instruction(organization_owner:Pubkey, title:String, pass_name:String)]
+pub struct ManageBenefit<'info> {
+    #[account(
+        seeds=[
+            "ORGANIZATION".as_bytes(),
+            organization_owner.as_ref()
+        ],
+        bump,
+    )]
+    pub organization_pda: Account<'info, Organization>,
+    #[account(
+        seeds=[
+            "BENEFIT".as_bytes(),
+            organization_pda.key().as_ref(),
+            title.as_bytes()
+        ],
+        bump,
+    )]
+    pub benefit_pda: Account<'info, crate::Benefit>,
+    #[account(
+        seeds=[
+            "PASS_TEMPLATE".as_bytes(),
+            organization_pda.key().as_ref(),
+            pass_name.as_bytes()
+        ],
+        bump,
+    )]
+    pub pass_template_pda: Account<'info, PassTemplate>,
+    pub authorized_key: Signer<'info>,
+    pub server: Signer<'info>
+}
+
+
+#[derive(Accounts)]
+#[instruction(organization_owner:Pubkey, title:String, pass_name:String, user:Pubkey)]
+pub struct RedeemBenefit<'info> {
+    #[account(
+        seeds=[
+            "ORGANIZATION".as_bytes(),
+            organization_owner.as_ref()
+        ],
+        bump,
+    )]
+    pub organization_pda: Account<'info, Organization>,
+    #[account(
+        seeds=[
+            "BENEFIT".as_bytes(),
+            organization_pda.key().as_ref(),
+            title.as_bytes()
+        ],
+        bump,
+    )]
+    pub benefit_pda: Account<'info, crate::Benefit>,
+    #[account(
+        seeds=[
+            "PASS_TEMPLATE".as_bytes(),
+            organization_pda.key().as_ref(),
+            pass_name.as_bytes()
+        ],
+        bump,
+    )]
+    pub pass_template_pda: Account<'info, PassTemplate>,
+    #[account(
+        mut,
+        seeds=[
+            "PASS".as_bytes(),
+            pass_template_pda.key().as_ref(),
+            user.key().as_ref()
+        ],
+        bump,
+    )]
+    pub pass_pda: Account<'info, Pass>,
+    pub authorized_key: Signer<'info>,
+    pub server: Signer<'info>
 }
 
 #[account]
@@ -245,7 +417,8 @@ pub struct Organization {
 #[account]
 pub struct PassTemplate {
     organization: Pubkey,
-    name: String
+    name: String,
+    issue_condition: String
 }
 
 #[account]
@@ -256,4 +429,13 @@ pub struct Pass {
     expiry_timestamp: u32,
     initial_points: u32,
     points_left: u32
+}
+
+#[account]
+pub struct Benefit {
+    organization: Pubkey,
+    title: String,
+    metadata_cid: String,
+    worth: u32,
+    eligible_passes: Vec<Pubkey>
 }

@@ -2,7 +2,6 @@ use anchor_lang::error_code;
 
 #[error_code]
 pub enum OrganizationError {
-    // Error 0
     #[msg("A organization cannot have more than 10 authorized keys")]
     MaxApiKeyLimitReached,
 
@@ -17,4 +16,13 @@ pub enum OrganizationError {
 
     #[msg("Insufficient points")]
     InsufficientPoints,
+
+    #[msg("A benefit cannot have more than 10 eligible passes")]
+    MaxPassLimitReached,
+
+    #[msg("Pass is already eligible")]
+    PassAlreadyEligible,
+
+    #[msg("Pass is not eligible")]
+    PassNotFound
 }

@@ -92,7 +92,7 @@ describe("loxel", () => {
       name: "Gold Pass"
     };
 
-    const tx = await program.methods.addLoyaltyPass(passDetails.name).rpc();
+    const tx = await program.methods.addLoyaltyPass(passDetails.name, "condition 1").rpc();
 
     const [organization_pda] = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("ORGANIZATION"), provider.wallet.publicKey.toBuffer()], program.programId);
     // const organization = await program.account.organization.fetch(organization_pda);

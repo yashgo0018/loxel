@@ -8,3 +8,8 @@
   font-family: "Geist Sans";
   src: url("../fonts/GeistVF.ttf");
 }
+
+@font-face {
+  font-family: "Dots Enhanced";
+  src: url("../fonts/DotsVF.ttf");
+}

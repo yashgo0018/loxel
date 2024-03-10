@@ -29,6 +29,7 @@ module.exports = {
         poppins: '"Poppins", sans-serif',
         raleway: '"Raleway", sans-serif',
         geist: '"Geist Sans", sans-serif',
+        dots : '"Dots Enhanced", sans-serif',
       },
       zIndex: {
         "1": "1",

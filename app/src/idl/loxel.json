@@ -1,0 +1,1101 @@
+{
+  "version": "0.1.0",
+  "name": "loxel",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [],
+      "args": []
+    },
+    {
+      "name": "registerOrganization",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "relayer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "metadataCid",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "addAuthorizedKey",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "key",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "removeAuthorizedKey",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "key",
+          "type": "publicKey"
+        }
+      ]
+    },
+    {
+      "name": "addLoyaltyPass",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passTemplatePda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS_TEMPLATE"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "issueCondition",
+          "type": "string"
+        },
+        {
+          "name": "metadataCid",
+          "type": "string"
+        },
+        {
+          "name": "allowBoundingCurve",
+          "type": "bool"
+        },
+        {
+          "name": "initialPrice",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "issueLoyaltyPass",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "organization_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passTemplatePda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS_TEMPLATE"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "pass_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "PassTemplate",
+                "path": "pass_template_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authorizedKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "server",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "organizationOwner",
+          "type": "publicKey"
+        },
+        {
+          "name": "passName",
+          "type": "string"
+        },
+        {
+          "name": "user",
+          "type": "publicKey"
+        },
+        {
+          "name": "expiryTimestamp",
+          "type": "u32"
+        },
+        {
+          "name": "points",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "deductPoints",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "organization_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passTemplatePda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS_TEMPLATE"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "pass_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "PassTemplate",
+                "path": "pass_template_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authorizedKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "server",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "organizationOwner",
+          "type": "publicKey"
+        },
+        {
+          "name": "passName",
+          "type": "string"
+        },
+        {
+          "name": "user",
+          "type": "publicKey"
+        },
+        {
+          "name": "points",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "createBenefit",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "organization_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "benefitPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "BENEFIT"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "title"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authorizedKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "server",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "organizationOwner",
+          "type": "publicKey"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "metadataCid",
+          "type": "string"
+        },
+        {
+          "name": "worth",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "addEligiblePass",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "organization_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "benefitPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "BENEFIT"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "title"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passTemplatePda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS_TEMPLATE"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "pass_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authorizedKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "server",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "organizationOwner",
+          "type": "publicKey"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "passName",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "removeEligiblePass",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "organization_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "benefitPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "BENEFIT"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "title"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passTemplatePda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS_TEMPLATE"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "pass_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authorizedKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "server",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "organizationOwner",
+          "type": "publicKey"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "passName",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "redeemBenefit",
+      "accounts": [
+        {
+          "name": "organizationPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "organization_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "benefitPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "BENEFIT"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "title"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passTemplatePda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS_TEMPLATE"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "pass_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "PassTemplate",
+                "path": "pass_template_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "publicKey",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authorizedKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "server",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "organizationOwner",
+          "type": "publicKey"
+        },
+        {
+          "name": "benefitTitle",
+          "type": "string"
+        },
+        {
+          "name": "passName",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "buyUsingBoundingCurve",
+      "accounts": [
+        {
+          "name": "organizationOwner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "organizationPda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "ORGANIZATION"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "organization_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passTemplatePda",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS_TEMPLATE"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Organization",
+                "path": "organization_pda"
+              },
+              {
+                "kind": "arg",
+                "type": "string",
+                "path": "pass_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "passPda",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "PASS"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "PassTemplate",
+                "path": "pass_template_pda"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "passName",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Organization",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadataCid",
+            "type": "string"
+          },
+          {
+            "name": "authorizedKeys",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "totalBenefits",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PassTemplate",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "organization",
+            "type": "publicKey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "issueCondition",
+            "type": "string"
+          },
+          {
+            "name": "metadataCid",
+            "type": "string"
+          },
+          {
+            "name": "allowBoundingCurve",
+            "type": "bool"
+          },
+          {
+            "name": "initialPrice",
+            "type": "u64"
+          },
+          {
+            "name": "boundingCurveTokens",
+            "type": "u32"
+          },
+          {
+            "name": "totalMinted",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pass",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "customer",
+            "type": "publicKey"
+          },
+          {
+            "name": "template",
+            "type": "publicKey"
+          },
+          {
+            "name": "organization",
+            "type": "publicKey"
+          },
+          {
+            "name": "expiryTimestamp",
+            "type": "u32"
+          },
+          {
+            "name": "initialPoints",
+            "type": "u32"
+          },
+          {
+            "name": "pointsLeft",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Benefit",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "organization",
+            "type": "publicKey"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "metadataCid",
+            "type": "string"
+          },
+          {
+            "name": "worth",
+            "type": "u32"
+          },
+          {
+            "name": "eligiblePasses",
+            "type": {
+              "vec": "publicKey"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "MaxApiKeyLimitReached",
+      "msg": "A organization cannot have more than 10 authorized keys"
+    },
+    {
+      "code": 6001,
+      "name": "KeyAlreadyAuthorized",
+      "msg": "Key is already authorized"
+    },
+    {
+      "code": 6002,
+      "name": "KeyNotFound",
+      "msg": "Key is not authorized"
+    },
+    {
+      "code": 6003,
+      "name": "Unauthorized",
+      "msg": "Key not unauthorized"
+    },
+    {
+      "code": 6004,
+      "name": "InsufficientPoints",
+      "msg": "Insufficient points"
+    },
+    {
+      "code": 6005,
+      "name": "MaxPassLimitReached",
+      "msg": "A benefit cannot have more than 10 eligible passes"
+    },
+    {
+      "code": 6006,
+      "name": "PassAlreadyEligible",
+      "msg": "Pass is already eligible"
+    },
+    {
+      "code": 6007,
+      "name": "PassNotFound",
+      "msg": "Pass is not eligible"
+    },
+    {
+      "code": 6008,
+      "name": "PassNotOnBoundingCurve",
+      "msg": "Pass is not being sold using bounding curves"
+    },
+    {
+      "code": 6009,
+      "name": "PassOnBoundingCurve",
+      "msg": "Pass is being sold using bounding curves"
+    }
+  ],
+  "metadata": {
+    "address": "Hnutco6zh5mJ1cbE4Jyj4wUxSJJKg8bNUoY4Pzewr6Bi"
+  }
+}

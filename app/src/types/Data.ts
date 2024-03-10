@@ -9,5 +9,7 @@ export interface PassData {
   };
   logo: { url: string };
   passName: string;
-  userName : string
+  userName: string;
+  expiry: number;
+  usage: { used: number; total: number };
 }

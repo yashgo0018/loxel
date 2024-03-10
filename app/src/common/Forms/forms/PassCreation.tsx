@@ -20,7 +20,7 @@ export default function PassCreation(props: PassCreationProps) {
             passName: "Shoppers Black",
             userName: "Spandan Barve",
             colors: {
-              primary: "#111111",
+              primary: "#11211B",
               secondary: "#a67c00",
               text: { primary: "#ffffff", secondary: "#000000" },
             },
@@ -28,6 +28,8 @@ export default function PassCreation(props: PassCreationProps) {
             logo: {
               url: "https://watcher.guru/news/wp-content/uploads/2023/12/avax-800x450.jpg.webp",
             },
+            expiry: 1830066943000,
+            usage: { total: 10, used: 6 },
           }}
         />
       </div>

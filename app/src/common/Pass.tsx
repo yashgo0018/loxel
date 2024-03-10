@@ -49,12 +49,13 @@ export default function Pass(props: PassProps) {
           </div>
 
           <div className="h-1/3 relative px-3 pt-3 flex justify-between items-center">
-            <figure className="h-full relative aspect-square overflow-hidden rounded-full">
+            <figure className="h-full relative aspect-square rounded-full" style={{filter: `drop-shadow(-3px 3px 2px rgba(0, 0, 0, 0.5)) drop-shadow(2px -2px 4px rgba(255, 255, 255, 0.15))`}} >
               <img
-                className="absolute-cover aspect-square object-cover"
+                className="absolute-cover aspect-square object-cover rounded-full"
                 src={data.logo.url}
+                
               />
-              <div className="absolute-cover mix-blend-hue bg-B" />
+              <div className="absolute-cover mix-blend-hue bg-B rounded-full" />
             </figure>
 
             <div className="text-C">

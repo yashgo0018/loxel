@@ -33,14 +33,10 @@ export default function Passes() {
         </p>
       </div>
     ),
+    onClickFunction: createPassAction,
   };
 
-  return (
-    <ViewDeatils
-      className="flex w-full my-10"
-      data={ViewDetailsData}
-    />
-  );
+  return <ViewDeatils className="flex w-full my-10" data={ViewDetailsData} />;
 }
 
 const dummyPasses: PassData[] = [];

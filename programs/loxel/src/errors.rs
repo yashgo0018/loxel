@@ -24,5 +24,11 @@ pub enum OrganizationError {
     PassAlreadyEligible,
 
     #[msg("Pass is not eligible")]
-    PassNotFound
+    PassNotFound,
+
+    #[msg("Pass is not being sold using bounding curves")]
+    PassNotOnBoundingCurve,
+
+    #[msg("Pass is being sold using bounding curves")]
+    PassOnBoundingCurve,
 }

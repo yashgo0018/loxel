@@ -6,6 +6,8 @@ declare_id!("Hnutco6zh5mJ1cbE4Jyj4wUxSJJKg8bNUoY4Pzewr6Bi");
 
 #[program]
 pub mod loxel {
+    use anchor_lang::solana_program::native_token::LAMPORTS_PER_SOL;
+    use anchor_lang::solana_program::program::invoke;
     use crate::errors::OrganizationError;
     use super::*;
 
@@ -60,12 +62,15 @@ pub mod loxel {
         Ok(())
     }
 
-    pub fn add_loyalty_pass(ctx: Context<AddLoyaltyPass>, name: String, issue_condition: String) -> Result<()> {
+    pub fn add_loyalty_pass(ctx: Context<AddLoyaltyPass>, name: String, issue_condition: String, metadata_cid: String, allow_bounding_curve: bool, initial_price: u64) -> Result<()> {
         let pass_template = &mut ctx.accounts.pass_template_pda;
 
         pass_template.organization = ctx.accounts.organization_pda.key();
         pass_template.name = name;
         pass_template.issue_condition = issue_condition;
+        pass_template.metadata_cid = metadata_cid;
+        pass_template.allow_bounding_curve = allow_bounding_curve;
+        pass_template.initial_price = initial_price;
 
         Ok(())
     }
@@ -73,6 +78,10 @@ pub mod loxel {
     pub fn issue_loyalty_pass(ctx: Context<IssuePass>, organization_owner:Pubkey, pass_name:String, user:Pubkey, expiry_timestamp: u32, points: u32) -> Result<()> {
         if !ctx.accounts.organization_pda.authorized_keys.contains(&ctx.accounts.authorized_key.key()) {
             return err!(OrganizationError::Unauthorized);
+        }
+
+        if ctx.accounts.pass_template_pda.allow_bounding_curve {
+            return err!(OrganizationError::PassOnBoundingCurve);
         }
 
         let pass = &mut ctx.accounts.pass_pda;
@@ -162,6 +171,38 @@ pub mod loxel {
 
         Ok(())
     }
+
+    pub fn buy_using_bounding_curve(ctx: Context<BuyUsingBoundingCurve>, pass_name: String) -> Result<()> {
+        if ctx.accounts.pass_template_pda.allow_bounding_curve {
+            return err!(OrganizationError::PassNotOnBoundingCurve);
+        }
+
+        let pass_template = &mut ctx.accounts.pass_template_pda;
+
+        let price = pass_template.initial_price + LAMPORTS_PER_SOL * pass_template.totalMinted / 1000;
+        pass_template.totalMinted += 1;
+
+        let inst = anchor_lang::solana_program::system_instruction::transfer(
+            &ctx.accounts.user.key(),
+            &ctx.accounts.organization_owner.key(),
+            price
+        );
+
+        invoke(&inst, &[
+            ctx.accounts.user.to_account_info(),
+            ctx.accounts.organization_owner.to_account_info(),
+        ])?;
+
+        let pass = &mut ctx.accounts.pass_pda;
+        pass.points_left = 100;
+        pass.initial_points = 100;
+        pass.organization = ctx.accounts.organization_pda.key();
+        pass.template = pass_template.key();
+        pass.expiry_timestamp = 0; // TODO: set correct expiry here
+        pass.customer = ctx.accounts.user.key();
+
+        Ok(())
+    }
 }
 
 #[derive(Accounts)]
@@ -200,7 +241,7 @@ pub struct KeyChange<'info> {
 }
 
 #[derive(Accounts)]
-#[instruction(name:String, issue_condition:String)]
+#[instruction(name:String, issue_condition:String, metadata_cid:String)]
 pub struct AddLoyaltyPass<'info> {
     #[account(
         seeds=[
@@ -219,7 +260,7 @@ pub struct AddLoyaltyPass<'info> {
         ],
         bump,
         payer=owner,
-        space=8+32+(4+name.len())+(4+issue_condition.len())
+        space=8+32+(4+name.len())+(4+issue_condition.len())+(4+metadata_cid.len())+1+8+4+8
     )]
     pub pass_template_pda: Account<'info, PassTemplate>,
     #[account(mut)]
@@ -406,6 +447,48 @@ pub struct RedeemBenefit<'info> {
     pub server: Signer<'info>
 }
 
+
+#[derive(Accounts)]
+#[instruction(pass_name:String)]
+pub struct BuyUsingBoundingCurve<'info> {
+    #[account(mut)]
+    /// CHECK: not required
+    pub organization_owner: AccountInfo<'info>,
+    #[account(
+        seeds=[
+            "ORGANIZATION".as_bytes(),
+            organization_owner.key().as_ref()
+        ],
+        bump,
+    )]
+    pub organization_pda: Account<'info, Organization>,
+    #[account(
+        seeds=[
+            "PASS_TEMPLATE".as_bytes(),
+            organization_pda.key().as_ref(),
+            pass_name.as_bytes()
+        ],
+        bump,
+    )]
+    pub pass_template_pda: Account<'info, PassTemplate>,
+    #[account(
+        init,
+        seeds=[
+            "PASS".as_bytes(),
+            pass_template_pda.key().as_ref(),
+            user.key().as_ref()
+        ],
+        bump,
+        payer=user,
+        space=8+32+32+32+4+4+4
+    )]
+    pub pass_pda: Account<'info, Pass>,
+    pub system_program: Program<'info, System>,
+    #[account(mut)]
+    pub user: Signer<'info>
+}
+
+
 #[account]
 pub struct Organization {
     owner: Pubkey,
@@ -418,7 +501,12 @@ pub struct Organization {
 pub struct PassTemplate {
     organization: Pubkey,
     name: String,
-    issue_condition: String
+    issue_condition: String,
+    metadata_cid: String,
+    allow_bounding_curve: bool,
+    initial_price: u64,
+    bounding_curve_tokens: u32,
+    totalMinted: u64,
 }
 
 #[account]

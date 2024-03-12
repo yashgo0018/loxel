@@ -13,3 +13,56 @@
   font-family: "Dots Enhanced";
   src: url("../fonts/DotsVF.ttf");
 }
+
+@keyframes hero-pyramid-float {
+  from {
+    transform: translateY(0%);
+  }
+  50% {
+    transform: translateY(-5%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes hero-text {
+  from {
+    transform: translateY(0%);
+    content: "Loyalty";
+  }
+  14.5% {
+    content: "Loyalty";
+  }
+  15% {
+    transform: translateY(100%);
+  }
+  15.5% {
+    content: "Rewards";
+  }
+  30% {
+    transform: translateY(0%);
+    content: "Rewards";
+  }
+  44.5% {
+    content: "Rewards";
+  }
+  45% {
+    transform: translateY(100%);
+    content: "Benefits";
+  }
+  60% {
+    transform: translateY(0%);
+  }
+  82.5% {
+    content: "Benefits";
+  }
+  83% {
+    transform: translateY(100%);
+    content: "Loyalty";
+  }
+  100% {
+    transform: translateY(0%);
+    content: "Loyalty";
+  }
+}

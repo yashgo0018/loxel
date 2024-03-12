@@ -31,18 +31,18 @@ export default function BuyPassPage() {
   );
 }
 
-const dummyPass = {
-  passName: "Youtube Kids",
-  userName: "Spandan Barve",
+const dummyPass =   {
+  passName: "Youtube Advanced",
+  userName: "Riya Jain",
   colors: {
-    primary: "#6c736d",
-    secondary: "#0d751d",
-    text: { primary: "#fefefe", secondary: "#fefefe" },
+    primary: "#101010",
+    secondary: "#b00b1f",
+    text: { primary: "#ffffff", secondary: "#fefefe" },
   },
-  textures: { primary: "feather", secondary: "glass" },
+  textures: { primary: "america", secondary: "glass" },
   logo: {
-    url: "https://i.pinimg.com/originals/41/e8/20/41e82046cd52130a111049ea560cfbda.png",
+    url: "https://t3.ftcdn.net/jpg/04/74/05/94/360_F_474059464_qldYuzxaUWEwNTtYBJ44VN89ARuFktHW.jpg",
   },
-  expiry: 1834066743000,
-  usage: { total: 10, used: 2 },
+  expiry: 1830066943000,
+  usage: { total: 10, used: 6 },
 } as const;
